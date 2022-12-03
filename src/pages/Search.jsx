@@ -1,100 +1,98 @@
-import React, { Component } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { debounce } from "lodash";
 import BookCard from "../components/BookCard";
 import * as BooksAPI from "../BooksAPI";
 
-class Search extends Component {
-  // validate props
-  static propTypes = {
-    handelBookStatus: PropTypes.func.isRequired,
-    userBooks: PropTypes.array.isRequired
-  };
+const Search = (props) => {
+  let [books, updateBooks] = useState([]);
 
-  state = {
-    books: []
-  };
-
-  handelSearch = query => {
+  let handelSearch = debounce((query) => {
     let searchQuery = query.trim();
     if (searchQuery) {
-      this.props.toggleLoading();
+      props.toggleLoading();
       BooksAPI.search(searchQuery)
-        .then(books => {
-          books.forEach(book => {
-            let targetBook = this.props.userBooks.find(
-              userBook => userBook.id === book.id
+        .then((result) => {
+          result.forEach((book) => {
+            let targetBook = props.userBooks.find(
+              (userBook) => userBook.id === book.id
             );
             if (targetBook) {
               book.shelf = targetBook.shelf;
             }
           });
-          this.setState({ books });
+          updateBooks(result);
         })
         .catch(() => {
           console.log("something went wrong, please try again later :)");
-          this.setState({ books: null });
+          updateBooks(null);
         })
         .finally(() => {
-          this.props.toggleLoading();
+          props.toggleLoading();
         });
     }
-  };
+  }, 500);
 
-  handelBookStatus = (book, shelf) => {
-    this.props.handelBookStatus(book, shelf);
-    let { books } = this.state;
-    let targetBook = books.find(bookItem => bookItem.id === book.id);
+  let handelBookStatus = (book, shelf) => {
+    props.handelBookStatus(book, shelf);
+    let updatedBooks = [...books];
+    let targetBook = updatedBooks.find((bookItem) => bookItem.id === book.id);
     targetBook.shelf = shelf;
-    this.setState({ books });
+    updateBooks(updatedBooks);
   };
-  render() {
-    return (
-      <div className="search-books">
-        <div className="search-books-bar">
-          <Link to="/">
-            <button className="close-search">Close</button>
-          </Link>
 
-          <div className="search-books-input-wrapper">
-            <input
-              id="search-input"
-              type="text"
-              placeholder="Search by title or author"
-              onChange={e => this.handelSearch(e.target.value)}
-            />
-          </div>
-        </div>
-        <div className="search-books-results">
-          <ol className="books-grid">
-            {!!(Array.isArray(this.state.books) && this.state.books.length) &&
-              this.state.books.map(book => (
-                <BookCard
-                  key={book.id}
-                  book={book}
-                  handelBookStatus={this.handelBookStatus}
-                />
-              ))}
-          </ol>
+  useEffect(() => {
+    document.getElementById("search-input").focus();
+  }, []);
 
-          {!Array.isArray(this.state.books) && (
-            <h3
-              style={{
-                textAlign: "center",
-                margin: "40px 0"
-              }}
-            >
-              Try To Search For Another Book
-            </h3>
-          )}
+  return (
+    <div className="search-books">
+      <div className="search-books-bar">
+        <Link to="/">
+          <button className="close-search">Close</button>
+        </Link>
+
+        <div className="search-books-input-wrapper">
+          <input
+            id="search-input"
+            type="text"
+            placeholder="Search by title or author"
+            onChange={(e) => handelSearch(e.target.value)}
+          />
         </div>
       </div>
-    );
-  }
+      <div className="search-books-results">
+        <ol className="books-grid">
+          {!!(Array.isArray(books) && books.length) &&
+            books.map((book) => (
+              <BookCard
+                key={book.id}
+                book={book}
+                handelBookStatus={handelBookStatus}
+              />
+            ))}
+        </ol>
 
-  componentDidMount() {
-    document.getElementById("search-input").focus();
-  }
-}
+        {!Array.isArray(books) && (
+          <h3
+            style={{
+              textAlign: "center",
+              margin: "40px 0",
+            }}
+          >
+            Try To Search For Another Book
+          </h3>
+        )}
+      </div>
+    </div>
+  );
+};
+
+// validate props
+Search.propTypes = {
+  userBooks: PropTypes.array.isRequired,
+  handelBookStatus: PropTypes.func.isRequired,
+};
 
 export default Search;

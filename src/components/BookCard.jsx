@@ -1,7 +1,6 @@
-import React from "react";
 import PropTypes from "prop-types";
 
-const BookCard = props => {
+const BookCard = (props) => {
   let { book, handelBookStatus } = props;
   return (
     <li>
@@ -14,12 +13,12 @@ const BookCard = props => {
               height: 193,
               backgroundImage: book.imageLinks
                 ? `url(${book.imageLinks.smallThumbnail})`
-                : ""
+                : "",
             }}
           />
           <div className="book-shelf-changer">
             <select
-              onChange={e => handelBookStatus(book, e.target.value)}
+              onChange={(e) => handelBookStatus(book, e.target.value)}
               value={book.shelf || "none"}
             >
               <option value="move" disabled>
@@ -49,7 +48,7 @@ const BookCard = props => {
 // validate props
 BookCard.propTypes = {
   book: PropTypes.object.isRequired,
-  handelBookStatus: PropTypes.func.isRequired
+  handelBookStatus: PropTypes.func.isRequired,
 };
 
 export default BookCard;

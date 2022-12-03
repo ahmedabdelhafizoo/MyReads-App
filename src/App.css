@@ -10,8 +10,13 @@ body {
 body, .app {
   background: white;
 }
+
 button {
   cursor: pointer;
+}
+
+img {
+  max-width: 100%;
 }
 
 /* main page */
@@ -66,7 +71,7 @@ button {
   height: 50px;
   border-radius: 50%;
   background-color: #4b6cb7;
-  background-image: url('./icons/add.svg');
+  background-image: url('./assets/images/icons/add.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 28px;
@@ -82,7 +87,6 @@ button {
 
 
 /* search page */
-
 .search-books-bar {
   position: fixed;
   width: 100%;
@@ -112,7 +116,7 @@ button {
   left: 15px;
   width: 50px;
   height: 53px;
-  background-image: url('./icons/arrow-back.svg');
+  background-image: url('./assets/images/icons/arrow-back.svg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: 28px;
@@ -132,8 +136,8 @@ button:active {
 .search-books-results .books-grid {
   justify-content: center;
 }
-/* books grid */
 
+/* books grid */
 .books-grid {
   list-style-type: none;
   padding: 0;
@@ -178,7 +182,7 @@ button:active {
   height: 40px;
   border-radius: 50%;
   background: #4b6cb7;
-  background-image: url('./icons/arrow-drop-down.svg');
+  background-image: url('./assets/images/icons/arrow-drop-down.svg');
   background-repeat: no-repeat;
   background-position: center;
   background-size: 20px;
@@ -190,10 +194,16 @@ button:active {
   height: 100%;
   opacity: 0;
   cursor: pointer;
+  background: #4b6cb7;
+  color: #fff;
+  font-size: 17px;
+}
+
+.book-shelf-changer select option:disabled {
+  color: rgba(238, 238, 238, 0.6);
 }
 
 /* book cover */
-
 .book-cover {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
   background: #eee;
@@ -238,4 +248,33 @@ button:active {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* error page */
+.error-page {
+  padding: 50px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 35px;
+  min-height: 100vh;
+}
+
+.error-page__img {
+  max-width: 500px;
+}
+
+.error-page__btn {
+  border: none;
+  outline: none;
+  background: #4b6cb7;
+  color: #fff;
+  transition: background .3s;
+  font-size: 18px;
+  padding: 15px 25px;
+}
+.error-page__btn:hover {
+  background: #243B55;
 }

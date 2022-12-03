@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 import BooksShelf from "../components/BooksShelf";
 
-const Home = props => {
+const Home = (props) => {
   return (
     <div className="list-books">
       <div className="list-books-title">
@@ -34,7 +34,7 @@ const Home = props => {
 // validate props
 Home.propTypes = {
   shelves: PropTypes.array.isRequired,
-  handelBookStatus: PropTypes.func.isRequired
+  handelBookStatus: PropTypes.func.isRequired,
 };
 
 export default Home;
